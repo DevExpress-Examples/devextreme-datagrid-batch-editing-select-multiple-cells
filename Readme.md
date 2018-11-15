@@ -1,3 +1,7 @@
+<!-- default file list -->
+*Files to look at*:
+
+<!-- default file list end -->
 # dxDataGrid - Batch Editing - How to select several cells for editing using the CTRL key
 
 
