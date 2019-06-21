@@ -3,6 +3,9 @@
 
 <!-- default file list end -->
 # dxDataGrid - Batch Editing - How to select several cells for editing using the CTRL key
+<!-- run online -->
+**[[Run Online]](https://codecentral.devexpress.com/t361032/)**
+<!-- run online end -->
 
 
 <p>This example illustrates how to allow end used to select more than one cell for editing by holding the CTRL key. Then, when the user changes the editor text, the same text will be entered to all selected cells. </p>
