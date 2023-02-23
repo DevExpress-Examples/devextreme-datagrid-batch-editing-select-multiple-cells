@@ -3,29 +3,22 @@
 [![](https://img.shields.io/badge/Open_in_DevExpress_Support_Center-FF7200?style=flat-square&logo=DevExpress&logoColor=white)](https://supportcenter.devexpress.com/ticket/details/T361032)
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 <!-- default badges end -->
-<!-- default file list -->
-*Files to look at*:
 
-<!-- default file list end -->
-# dxDataGrid - Batch Editing - How to select several cells for editing using the CTRL key
+# DataGrid for DevExtreme - How to implement selecting multiple cells with a keyboard for batch editing 
+
+This example illustrates how to allow a user to select more than one cell for editing by holding the CTRL key. When the user changes the editor text, the text is entered in all the selected cells.
+
+![DataGrid - multiple cells selected in a batch editing mode](/images/datagrid-select-multiple-cells.png)
+
 <!-- run online -->
-**[[Run Online]](https://codecentral.devexpress.com/t361032/)**
+**[Run Online](https://codecentral.devexpress.com/t361032/)**
 <!-- run online end -->
 
+## Implementation Details
 
-<p>This example illustrates how to allow end used to select more than one cell for editing by holding the CTRL key. Then, when the user changes the editor text, the same text will be entered to all selected cells. </p>
-<p>It is possible to implement this scenario by performing the following steps:</p>
-<p>Create an array to store selected cells:</p>
+1. Create an array to store selected cells.
 
-
-```js
-var editCells = [];
-
-```
-
-
-<p> Then, handle the <a href="http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/?version=15_2#onCellClick">onCellClick</a> event to add the selected cell to the array when the Ctrl key is held or clear the array if it is not:</p>
-
+2. Implement the [onCellClick](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#onCellClick) event handler to add a selected cell to the array when the **Ctrl** key is held. Otherwise, clear the array:
 
 ```js
 onCellClick: function (e) {
@@ -40,9 +33,7 @@ onCellClick: function (e) {
 
 ```
 
-
-<p> The <a href="http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/?version=15_2#onCellPrepared">onCellPrepared</a> event is handled to change the style of the selected row: </p>
-
+3. Implement the [onCellPrepared](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#onCellPrepared) event handler to change the style of the selected row:
 
 ```js
 onCellPrepared: function (e) {
@@ -53,8 +44,7 @@ onCellPrepared: function (e) {
 
 ```
 
-
-<p> After that, handle the <a href="http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/?version=15_2#onEditorPreparing">onEditorPreparing</a> event to set the text value for all selected cells when a user edits the last cell:</p>
+4. Implement the [onEditorPreparing](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#onEditorPreparing) event handler to specify a text value for all selected cells when a user edits the last cell:
 
 
 ```js
@@ -75,8 +65,7 @@ onEditorPreparing: function (e) {
 
 ```
 
-
-<p> To reset the selection when the Save or Cancel button is clicked, use the <a href="http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/?version=15_2#onContentReady">onContentReady</a> event:</p>
+5.To reset the selection when the **Save** or **Cancel** buttons are clicked, use the [onContentReady](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#onContentReady) event handler:
 
 
 ```js
@@ -92,8 +81,15 @@ onContentReady: function (e) {
 }
 ```
 
+## Files to Review
 
+- [index.html](jQuery/Index.html)
 
-<br/>
+## Documentation
 
+- [Getting Started with DataGrid](https://js.devexpress.com/Documentation/Guide/UI_Components/DataGrid/Getting_Started_with_DataGrid/)
 
+## More Examples
+
+- [DataGrid for DevExtreme - Display tooltip for data cells](https://github.com/DevExpress-Examples/devextreme-datagrid-display-tooltip-for-data-cells)
+- [DataGrid for DevExtreme - How to allow users select multiple cells](https://github.com/DevExpress-Examples/devextreme-datagrid-multiple-cell-selection)
