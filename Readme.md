@@ -6,7 +6,7 @@
 
 # DataGrid for DevExtreme - How to implement selecting multiple cells with a keyboard for batch editing 
 
-This example illustrates how to allow an end user to select more than one cell for editing by holding the CTRL key. When the user changes the editor text, the text will be entered to all selected cells.
+This example illustrates how to allow a user to select more than one cell for editing by holding the CTRL key. When the user changes the editor text, the text is entered in all the selected cells.
 
 ![DataGrid - multiple cells selected in a batch editing mode](/images/datagrid-select-multiple-cells.png)
 
