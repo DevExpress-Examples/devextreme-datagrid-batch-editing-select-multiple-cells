@@ -10,9 +10,6 @@ This example illustrates the use of the CTRL key to edit multiple cell values si
 
 ![DataGrid - multiple cells selected in a batch editing mode](/images/datagrid-select-multiple-cells.png)
 
-<!-- run online -->
-**[Run Online](https://codecentral.devexpress.com/t361032/)**
-<!-- run online end -->
 
 ## Implementation Details
 
