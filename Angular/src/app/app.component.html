@@ -1,3 +1,25 @@
 <div class="default-style">
-  <dx-button [text]="buttonText" (onClick)="onClick($event)"></dx-button>
+  <dx-data-grid
+    [dataSource]="employees"
+    keyExpr="ID"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onCellClick)="onCellClick($event)"
+    (onSaving)="resetEditCells()"
+    (onEditCanceled)="resetEditCells()"
+  >
+    <dxo-paging [enabled]="false"></dxo-paging>
+    <dxo-editing mode="batch" [allowUpdating]="true"></dxo-editing>
+    <dxi-column dataField="Prefix" caption="Title" [width]="70"></dxi-column>
+    <dxi-column dataField="FirstName"></dxi-column>
+    <dxi-column dataField="LastName"></dxi-column>
+    <dxi-column dataField="Position" [width]="170"></dxi-column>
+    <dxi-column dataField="StateID" caption="State" [width]="125">
+      <dxo-lookup
+        [dataSource]="states"
+        displayExpr="Name"
+        valueExpr="ID"
+      ></dxo-lookup>
+    </dxi-column>
+  </dx-data-grid>
 </div>

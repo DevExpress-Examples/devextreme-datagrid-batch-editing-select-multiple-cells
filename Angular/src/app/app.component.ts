@@ -1,21 +1,60 @@
 import { Component } from '@angular/core';
-import { DxButtonModule, DxButtonTypes } from 'devextreme-angular/ui/button';
+import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { Employee, Service, State } from './app.service';
 
 @Component({
     selector: 'app-root',
-    imports: [DxButtonModule],
+    imports: [DxDataGridModule],
+    providers: [Service],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'Angular';
+  employees: Employee[];
 
-  counter = 0;
+  states: State[];
 
-  buttonText = 'Click count: 0';
+  private editCells: string[] = [];
 
-  onClick(_e: DxButtonTypes.ClickEvent): void {
-    this.counter++;
-    this.buttonText = `Click count: ${this.counter}`;
+  constructor(service: Service) {
+    this.employees = service.getEmployees();
+    this.states = service.getStates();
+  }
+
+  onCellPrepared(e: DxDataGridTypes.CellPreparedEvent): void {
+    if (e.rowType === 'data' && this.editCells.includes(`${e.rowIndex}:${e.columnIndex}`)) {
+      e.cellElement.style.backgroundColor = 'lightblue';
+    }
+  }
+
+  onEditorPreparing(e: DxDataGridTypes.EditorPreparingEvent): void {
+    const grid = e.component;
+    const { editCells } = this;
+    if (e.parentType === 'dataRow') {
+      const oldOnValueChanged = e.editorOptions.onValueChanged;
+      e.editorOptions.onValueChanged = function onValueChanged(
+        this: unknown,
+        args: { value: unknown },
+      ) {
+        oldOnValueChanged.apply(this, [args]);
+        editCells.forEach((cell) => {
+          const [rowIndex, columnIndex] = cell.split(':').map(Number);
+          grid.cellValue(rowIndex, columnIndex, args.value);
+        });
+      };
+    }
+  }
+
+  onCellClick(e: DxDataGridTypes.CellClickEvent): void {
+    if (e.event?.ctrlKey) {
+      this.editCells.push(`${e.rowIndex}:${e.columnIndex}`);
+    } else if (this.editCells.length) {
+      this.editCells.length = 0;
+      e.component.repaint();
+    }
+  }
+
+  resetEditCells(): void {
+    this.editCells.length = 0;
   }
 }
