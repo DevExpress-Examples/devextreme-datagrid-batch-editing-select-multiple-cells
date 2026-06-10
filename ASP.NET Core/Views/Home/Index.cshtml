@@ -1,29 +1,67 @@
 @using ASP_NET_Core.Models
+@model IEnumerable<Employee>
 
-<h2>Home</h2>
+<script>
+    let editCells = [];
 
-@(Html.DevExtreme().DataGrid<SampleOrder>()
-    .ShowBorders(true)
-    .DataSource(d => d.Mvc().Controller("SampleData").LoadAction("Get").Key("OrderID"))
-    .Columns(columns => {
-        columns.AddFor(m => m.OrderID);
-        columns.AddFor(m => m.OrderDate);
-        columns.AddFor(m => m.CustomerName);
-        columns.AddFor(m => m.ShipCountry);
-        columns.AddFor(m => m.ShipCity);
+    function onCellPrepared(e) {
+        if (e.rowType === "data" && editCells.includes(`${e.rowIndex}:${e.columnIndex}`)) {
+            e.cellElement.css("background-color", "lightblue");
+        }
+    }
+
+    function onEditorPreparing(e) {
+        const grid = e.component;
+        if (e.parentType === "dataRow") {
+            const oldOnValueChanged = e.editorOptions.onValueChanged;
+            e.editorOptions.onValueChanged = function onValueChanged(args) {
+                oldOnValueChanged.apply(this, [args]);
+                editCells.forEach((cell) => {
+                    const [rowIndex, columnIndex] = cell.split(":").map(Number);
+                    grid.cellValue(rowIndex, columnIndex, args.value);
+                });
+            };
+        }
+    }
+
+    function onCellClick(e) {
+        if (e.event && e.event.ctrlKey) {
+            editCells.push(`${e.rowIndex}:${e.columnIndex}`);
+        } else if (editCells.length) {
+            editCells = [];
+            e.component.repaint();
+        }
+    }
+
+    function resetEditCells() {
+        editCells = [];
+    }
+</script>
+
+@(Html.DevExtreme().DataGrid<Employee>()
+    .ID("gridContainer")
+    .DataSource(Model)
+    .KeyExpr("ID")
+    .Paging(p => p.Enabled(false))
+    .Editing(editing => {
+        editing.Mode(GridEditMode.Batch);
+        editing.AllowUpdating(true);
     })
-    .Paging(p => p.PageSize(10))
-    .FilterRow(f => f.Visible(true))
-    .HeaderFilter(f => f.Visible(true))
-    .GroupPanel(p => p.Visible(true))
-    .Grouping(g => g.AutoExpandAll(false))
-    .RemoteOperations(true)
-    .Summary(s => s
-        .TotalItems(totalItems => {
-            totalItems.AddFor(m => m.ShipCity).SummaryType(SummaryType.Count);
-        })
-        .GroupItems(groupItems => {
-            groupItems.Add().SummaryType(SummaryType.Count);
-        })
-    )
+    .Columns(columns => {
+        columns.Add().DataField("Prefix").Caption("Title").Width(70);
+        columns.Add().DataField("FirstName");
+        columns.Add().DataField("LastName");
+        columns.Add().DataField("Position").Width(170);
+        columns.Add().DataField("StateID").Caption("State").Width(125)
+            .Lookup(lookup => lookup
+                .DataSource(State.States)
+                .DisplayExpr("Name")
+                .ValueExpr("ID")
+            );
+    })
+    .OnCellPrepared("onCellPrepared")
+    .OnEditorPreparing("onEditorPreparing")
+    .OnCellClick("onCellClick")
+    .OnSaving("resetEditCells")
+    .OnEditCanceled("resetEditCells")
 )
